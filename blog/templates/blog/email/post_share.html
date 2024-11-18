@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .email-header {
+            background-color: #0078d4;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .email-body {
+            padding: 20px;
+        }
+        .email-body h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #0078d4;
+        }
+        .email-body p {
+            margin: 10px 0;
+        }
+        .email-body a {
+            color: #0078d4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .email-body a:hover {
+            text-decoration: underline;
+        }
+        .comments-section {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f1f1f1;
+            border-left: 4px solid #0078d4;
+            border-radius: 4px;
+            font-style: italic;
+        }
+        .email-footer {
+            text-align: center;
+            padding: 15px;
+            background: #f1f1f1;
+            font-size: 12px;
+            color: #666;
+        }
+        .email-footer a {
+            color: #0078d4;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>My Blog</h1>
+        </div>
+        <div class="email-body">
+            <p>Hello,</p>
+            <h2>{{ post.title }}</h2>
+            <p>
+                This article has been recommended to you by <strong>{{ name }}</strong>.
+            </p>
+            <p>
+                You can read it at:
+                <a href="{{ post_url }}">{{ post_url }}</a>
+            </p>
+            {% if comments %}
+                <div class="comments-section">
+                    <p><strong>{{ name }}'s comments:</strong></p>
+                    <blockquote>{{ comments }}</blockquote>
+                </div>
+            {% endif %}
+            <p>Enjoy reading!</p>
+        </div>
+        <div class="email-footer">
+            <p>Sent by <a href="https://myblog.com">My Blog</a>. If you didn't request this, please ignore.</p>
+        </div>
+    </div>
+</body>
+</html>

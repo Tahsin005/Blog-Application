@@ -5,6 +5,9 @@ from . forms import EmailPostForm
 from django.core.mail import send_mail
 from django.http import Http404
 from django.views.generic import ListView
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 # Create your views here.
 class PostListView(ListView):
     """Alternative post list view"""
@@ -57,27 +60,34 @@ def post_share(request, post_id):
         form = EmailPostForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            post_url = request.build_absolute_uri(
-                post.get_absolute_url()
-            )
-            subject = (
-                f"{cd['name']} ({cd['email']}) "
-                f"recommends you read {post.title}"
-            )
-            message = (
-                f"Read {post.title} at {post_url}\n\n"
-                f"{cd['name']}\'s comments: {cd['comments']}"
-            )
-            send_mail(
+            post_url = request.build_absolute_uri(post.get_absolute_url())
+            subject = f"{cd['name']} ({cd['email']}) recommends you read {post.title}"
+
+            # Render HTML content for the email
+            html_content = render_to_string('blog/email/post_share.html', {
+                'post': post,
+                'post_url': post_url,
+                'name': cd['name'],
+                'comments': cd['comments'],
+            })
+
+            # Fallback plain text version of the email
+            text_content = strip_tags(html_content)
+
+            # Send email with HTML content
+            email = EmailMessage(
                 subject=subject,
-                message=message,
-                from_email=None,
-                recipient_list=[cd['to']]
+                body=html_content,
+                from_email=None,  # Use default from_email in settings
+                to=[cd['to']],
             )
+            email.content_subtype = "html"  # Mark the email as HTML
+            email.send()
             sent = True
 
     else:
         form = EmailPostForm()
+
     return render(
         request,
         'blog/post/share.html',
