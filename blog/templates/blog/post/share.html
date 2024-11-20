@@ -13,7 +13,7 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="SEND E-MAIL">
+            <input value="SEND E-MAIL" type="submit">
         </form>
     {% endif %}
 {% endblock content %}
